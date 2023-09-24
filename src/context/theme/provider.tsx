@@ -1,8 +1,15 @@
 "use client"
 
-import { ThemeProvider } from "styled-components"
+import React, { createContext, useContext } from "react";
+import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme, GlobalStyles } from "./config";
 import useDarkMode from "use-dark-mode";
+
+const DarkModeContext = createContext<ReturnType<typeof useDarkMode>>(null!);
+
+export function useDarkModeContext() {
+  return useContext(DarkModeContext);
+}
 
 export default function Provider({
     children,
@@ -14,9 +21,11 @@ export default function Provider({
     const theme = darkmode.value ? darkTheme : lightTheme
 
     return (
-      <ThemeProvider theme={theme}>
-        <GlobalStyles />
-        {children}
-      </ThemeProvider>
+      <DarkModeContext.Provider value={darkmode}>
+        <ThemeProvider theme={theme}>
+          <GlobalStyles />
+          {children}
+        </ThemeProvider>
+      </DarkModeContext.Provider>
     )
   }
