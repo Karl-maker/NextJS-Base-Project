@@ -1,3 +1,4 @@
+import "./global.css"
 import Theme from "../context/theme";
 
 export default function RootLayout({
