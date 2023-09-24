@@ -1,45 +1,44 @@
-// @ts-nocheck
 import React from "react";
 import styled from 'styled-components';
 
 const OuterWidget = styled.div<{ 
-    borderRadius: string, 
-    borderWidth: string, 
-    borderColor: string,
-    padding: string,
-    backgroundColor: string
+    outerBorderRadius: string, 
+    outerBorderWidth: string, 
+    outerBorderColor: string,
+    outerPadding: string,
+    outerBackgroundColor: string
 }>`
-    padding: ${props => props.padding};
+    padding: ${props => props.outerPadding};
     margin: 0px;
     height: 100%;
     box-sizing: border-box; /* Ensure padding is included within the height */
-    background-color: ${props => props.backgroundColor};
+    background-color: ${props => props.outerBackgroundColor};
 `;
 
 const Widget = styled.div<{ 
-    borderRadius: string, 
-    borderWidth: string, 
-    borderColor: string,
-    padding: string,
-    backgroundColor: string
+    innerBorderRadius: string, 
+    innerBorderWidth: string, 
+    innerBorderColor: string,
+    innerPadding: string,
+    innerBackgroundColor: string
 }>`
-    border-radius: ${props => props.borderRadius};
-    border: ${props => props.borderWidth} solid ${props => props.borderColor};
-    padding: ${props => props.padding};
+    border-radius: ${props => props.innerBorderRadius};
+    border: ${props => props.innerBorderWidth} solid ${props => props.innerBorderColor};
+    padding: ${props => props.innerPadding};
     height: 100%;
     box-sizing: border-box; /* Ensure padding is included within the height */
-    background-color: ${props => props.backgroundColor};
+    background-color: ${props => props.innerBackgroundColor};
 `;
 
 interface WidgetWrapperProps {
     children: React.ReactNode;
-    borderWidth?: string;
-    borderRadius?: string;
-    borderColor?: string;
+    outerBorderWidth?: string;
+    outerBorderRadius?: string;
+    outerBorderColor?: string;
     innerPadding?: string;
     innerBackgroundColor?: string;
-    backgroundColor?: string;
-    padding?: string;
+    outerBackgroundColor?: string;
+    outerPadding?: string;
 }
 
 /**
@@ -50,51 +49,50 @@ interface WidgetWrapperProps {
  * @component
  *
  * @param {React.ReactNode} children - The content to be wrapped.
- * @param {string} borderRadius - The border radius of the outer container.
- * @param {string} borderWidth - The border width of the inner widget.
- * @param {string} borderColor - The border color of the inner widget.
+ * @param {string} outerBorderRadius - The border radius of the outer container.
+ * @param {string} outerBorderWidth - The border width of the outer container.
+ * @param {string} outerBorderColor - The border color of the outer container.
  * @param {string} innerPadding - The padding of the inner widget.
- * @param {string} padding - The padding of the outer container.
  * @param {string} innerBackgroundColor - The background color of the inner widget.
- * @param {string} backgroundColor - The background color of the outer container.
+ * @param {string} outerBackgroundColor - The background color of the outer container.
+ * @param {string} outerPadding - The padding of the outer container.
  *
  * @returns {React.ReactNode} The wrapped content with customizable styling.
  *
  * @example
  * // Usage example:
  * <WidgetWrapper
- *   borderRadius="15px"
- *   borderWidth="2px"
- *   borderColor="blue"
+ *   outerBorderRadius="15px"
+ *   outerBorderWidth="2px"
+ *   outerBorderColor="blue"
  *   innerPadding="10px"
- *   padding="5px"
+ *   outerPadding="5px"
  *   innerBackgroundColor="white"
- *   backgroundColor="lightgray"
+ *   outerBackgroundColor="lightgray"
  * >
  *   <p>Hello, Widget!</p>
  * </WidgetWrapper>
  */
-
 const WidgetWrapper: React.FC<WidgetWrapperProps> = ({ 
     children,
-    borderRadius = '15px',
-    borderWidth = '0',
-    borderColor = 'transparent',
+    outerBorderRadius = '15px',
+    outerBorderWidth = '0',
+    outerBorderColor = 'transparent',
     innerPadding = '10px',
-    padding = '5px',
+    outerPadding = '5px',
     innerBackgroundColor = 'transparent',
-    backgroundColor = 'transparent'
+    outerBackgroundColor = 'transparent'
  }: WidgetWrapperProps) => {
     return <OuterWidget 
-        padding={padding}
-        backgroundColor={backgroundColor}
+        outerPadding={outerPadding}
+        outerBackgroundColor={outerBackgroundColor}
     >
         <Widget 
-            borderRadius={borderRadius}
-            borderWidth={borderWidth}
-            borderColor={borderColor}
-            padding={innerPadding}
-            backgroundColor={innerBackgroundColor}
+            innerBorderRadius={outerBorderRadius}
+            innerBorderWidth={outerBorderWidth}
+            innerBorderColor={outerBorderColor}
+            innerPadding={innerPadding}
+            innerBackgroundColor={innerBackgroundColor}
         >
             {children}
         </Widget>
