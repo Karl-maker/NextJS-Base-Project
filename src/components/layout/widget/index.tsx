@@ -1,7 +1,16 @@
 // @ts-nocheck
 
 import React from "react";
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
+const fade = keyframes`
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+`;
 
 const OuterWidget = styled.div<{ 
     outerBorderRadius: string, 
@@ -16,6 +25,22 @@ const OuterWidget = styled.div<{
     box-sizing: border-box; /* Ensure padding is included within the height */
     background-color: ${props => props.outerBackgroundColor};
 `;
+
+const Skeleton = styled.div<{ 
+    innerBorderRadius: string, 
+    innerBorderWidth: string, 
+    innerBorderColor: string,
+    innerPadding: string,
+    innerBackgroundColor: string
+}>`
+    border-radius: ${props => props.innerBorderRadius};
+    padding: ${props => props.innerPadding};
+    height: 100%;
+    box-sizing: border-box; /* Ensure padding is included within the height */
+    background-color: ${props => props.innerBackgroundColor};
+    animation: ${fade} 3s infinite; /* Add the fade-in and fade-out animation */
+`;
+
 
 const Widget = styled.div<{ 
     innerBorderRadius: string, 
@@ -41,6 +66,7 @@ interface WidgetWrapperProps {
     innerBackgroundColor?: string;
     outerBackgroundColor?: string;
     outerPadding?: string;
+    loading?: boolean;
 }
 
 /**
@@ -58,6 +84,7 @@ interface WidgetWrapperProps {
  * @param {string} innerBackgroundColor - The background color of the inner widget.
  * @param {string} outerBackgroundColor - The background color of the outer container.
  * @param {string} outerPadding - The padding of the outer container.
+ * @param {boolean} loading - Displays skeleton
  *
  * @returns {React.ReactNode} The wrapped content with customizable styling.
  *
@@ -83,22 +110,65 @@ const WidgetWrapper: React.FC<WidgetWrapperProps> = ({
     innerPadding = '10px',
     outerPadding = '5px',
     innerBackgroundColor = 'transparent',
-    outerBackgroundColor = 'transparent'
+    outerBackgroundColor = 'transparent',
+    loading = false
+ }: WidgetWrapperProps) => {
+    return <>
+        {!loading ?
+            <OuterWidget 
+            outerPadding={outerPadding}
+            outerBackgroundColor={outerBackgroundColor}
+            >
+                <Widget 
+                    innerBorderRadius={outerBorderRadius}
+                    innerBorderWidth={outerBorderWidth}
+                    innerBorderColor={outerBorderColor}
+                    innerPadding={innerPadding}
+                    innerBackgroundColor={innerBackgroundColor}
+                >
+                    {children}
+                </Widget>
+        </OuterWidget> 
+        :
+        <SkeletonWidget
+            outerBorderRadius = {outerBorderRadius}
+            outerBorderWidth = {outerBorderWidth}
+            outerBorderColor = {outerBorderColor}
+            innerPadding = {innerPadding}
+            outerPadding = {outerPadding}
+            outerBackgroundColor = {outerBackgroundColor}
+        />
+    }
+    </>
+}
+
+const SkeletonWidget: React.FC<WidgetWrapperProps> = ({ 
+    outerBorderRadius = '15px',
+    outerBorderWidth = '0',
+    outerBorderColor = 'transparent',
+    innerPadding = '10px',
+    outerPadding = '5px',
+    innerBackgroundColor = '#b2bec3',
+    outerBackgroundColor = 'transparent',
  }: WidgetWrapperProps) => {
     return <OuterWidget 
         outerPadding={outerPadding}
         outerBackgroundColor={outerBackgroundColor}
     >
-        <Widget 
+        <Skeleton 
+            className='skeleton'
             innerBorderRadius={outerBorderRadius}
             innerBorderWidth={outerBorderWidth}
             innerBorderColor={outerBorderColor}
             innerPadding={innerPadding}
             innerBackgroundColor={innerBackgroundColor}
         >
-            {children}
-        </Widget>
+        </Skeleton>
     </OuterWidget>
 }
 
-export default WidgetWrapper;
+
+export default {
+    Widget: WidgetWrapper,
+    Skeleton: SkeletonWidget
+}
