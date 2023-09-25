@@ -1,5 +1,3 @@
-Sure, here's an updated README for your Next.js base project that explains its purpose and includes instructions for running it with Docker:
-
 ```markdown
 # Next.js Base Project
 
