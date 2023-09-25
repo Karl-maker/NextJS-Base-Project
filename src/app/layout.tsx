@@ -1,5 +1,5 @@
 import "./global.css"
-import Theme from "../context/theme";
+import Provider from "../context/theme/provider";
 
 export default function RootLayout({
     children,
@@ -9,11 +9,11 @@ export default function RootLayout({
 
     return (
       <html lang="en">
-        <Theme.Provider>
+        <Provider>
             <body>
                 {children}
             </body>
-        </Theme.Provider>
+        </Provider>
       </html>
     )
   }
