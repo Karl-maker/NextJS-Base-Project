@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme, GlobalStyles } from "./config";
 import useDarkMode from "use-dark-mode";
@@ -57,12 +57,25 @@ export default function Provider({
 
     const darkmode = useDarkMode(true);
     const theme = darkmode.value ? darkTheme : lightTheme
+    const [isMount, setIsMount] = useState(false);
+
+    useEffect(() => {
+      (() => {
+        setIsMount(true);
+      })();
+    }, []) // renders on load
 
     return (
       <DarkModeContext.Provider value={darkmode}>
         <ThemeProvider theme={theme}>
           <GlobalStyles />
-          {children}
+          {isMount ? children : 
+            <body>
+              {
+                // Set loading state
+              }
+            </body>
+          }
         </ThemeProvider>
       </DarkModeContext.Provider>
     )
